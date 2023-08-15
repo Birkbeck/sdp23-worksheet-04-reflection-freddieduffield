@@ -1,10 +1,13 @@
 package reflection;
 
-class SomeClass {
-    public int someField;
-    private int anotherField;
+import java.util.ArrayList;
 
-    public SomeClass() {
+class SomeClass {
+    private String someField;
+//    private ArrayList<Short> anotherField;
+
+    public SomeClass(String someField) {
+//        this.someField = someField;
     }
 
     public SomeClass(int value) {
