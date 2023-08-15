@@ -14,43 +14,57 @@ public class DescribeClass {
             System.out.println("Usage: enter a class name"); // TODO: describe how to use the utility
 
         Class<?> klass = Class.forName(args[0]);
-        System.out.println("--------------------------------------");
+
+        printClassInfo(klass);
+
+        System.out.print("{ ");
+        System.out.println();
+
+        System.out.println("    // fields -----------------------");
+        Arrays.stream(klass.getFields()).forEach(DescribeClass::printFieldInfo);
+        System.out.println("    // constructors -----------------------");
+        Arrays.stream(klass.getConstructors()).forEach(DescribeClass::printConstructorInfo);
+        System.out.println("    // methods -----------------------");
+        Arrays.stream(klass.getMethods()).forEach(DescribeClass::printMethodInfo);
+
+        System.out.print("}");
+    }
+
+    static void printClassInfo(Class<?> klass) {
         System.out.print(getModifiers(klass) + " ");
         if (klass.isInterface()) {
             System.out.print("interface ");
         } else {
             System.out.print("class ");
         }
-        System.out.print(getFinalValue(klass.getName()));
-        System.out.print(" { ");
+        System.out.print(getFinalValue(klass.getName()) + " ");
+    }
+
+
+    static void printConstructorInfo(Constructor<?> constructor) {
+        System.out.print("    ");
+        System.out.print(getModifiers(constructor) + " ");
+        System.out.print(getFinalValue(constructor.getName()) + " ");
+        System.out.print(getParams(constructor) + " ");
         System.out.println();
+    }
 
-        System.out.println("fields: ");
-        for (Field anno : klass.getDeclaredFields()) {
-            System.out.print(getModifiers(anno) + " ");
-            System.out.print(getFinalValue(anno.getType().getName()) + " ");
-            System.out.print(getFinalValue(anno.getName()));
-            System.out.println();
-        }
+    static void printFieldInfo(Field field) {
+        System.out.print("    ");
+        System.out.print(getModifiers(field) + " ");
+        System.out.print(getFinalValue(field.getType().getName()) + " ");
+        System.out.print(getFinalValue(field.getName()));
+        System.out.println();
+    }
 
-        System.out.println("Constructors: ");
-        for (Executable constru : klass.getConstructors()) {
-            System.out.print(getModifiers(constru) + " ");
-            System.out.print(getFinalValue(constru.getName()));
-            System.out.print(getParams(constru) + " ");
-            System.out.println();
-        }
 
-        System.out.println("Methods: ");
-        for (Method meth : klass.getMethods()) {
-            System.out.print(getModifiers(meth));
-            System.out.print(" ");
-            System.out.print(getFinalValue( meth.getReturnType().toString() ) + " ");
-            System.out.print(meth.getName());
-            System.out.print(getParams(meth));
-            System.out.println();
-        }
-
+    static void printMethodInfo(Method method) {
+        System.out.print("    ");
+        System.out.print(getModifiers(method) + " ");
+        System.out.print(getFinalValue( method.getReturnType().toString() ) + " ");
+        System.out.print(method.getName() + " ");
+        System.out.print(getParams(method));
+        System.out.println();
     }
 
     static String getFinalValue(String input) {
@@ -73,3 +87,4 @@ public class DescribeClass {
                 .collect(Collectors.joining(", ", "(", ")"));
     }
 }
+
